@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"aaa_bekend/internal/lmodel"
 	"net/http"
 )
 
@@ -12,7 +11,7 @@ type RoleGuard struct {
 
 func (rg *RoleGuard) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	user, err := lmodel.UserFromContext(r.Context())
+	// user, err := lmodel.UserFromContext(r.Context())
 	// TODO
 
 	http.Error(w, "Forbidden", http.StatusForbidden)
