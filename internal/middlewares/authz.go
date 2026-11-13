@@ -27,7 +27,7 @@ func (rg *RoleGuard) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// 3. Jika looping selesai tapi tidak ada role yang cocok, blokir aksesnya!
+	// 3. Jika looping selesai tapi tidak ada role yang cocok, blokir aksesnya
 	http.Error(w, "Forbidden: You don't have enough permission to access this resource", http.StatusForbidden)
 }
 

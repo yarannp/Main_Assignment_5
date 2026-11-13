@@ -32,7 +32,7 @@ func SubmitProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Simpan proyek ke database atas nama user yang sedang login[cite: 2]
+	// 2. Simpan proyek ke database atas nama user yang sedang login
 	// Asumsi db.CreateProject mengeksekusi INSERT dan mengembalikan projectID
 	projectID, err := db.CreateProject(r.Context(), req.Title, req.Description, userCtx.ID)
 	if err != nil {
@@ -40,14 +40,13 @@ func SubmitProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 3. Kembalikan respons 201 beserta project_id[cite: 2]
+	// 3. Kembalikan respons 201 beserta project_id
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]int{"project_id": projectID})
 }
 
 func ListProjects(w http.ResponseWriter, r *http.Request) {
-	// TODO
 	// 1. Ambil seluruh daftar proyek dari database
 	projects, err := db.GetAllProjects(r.Context())
 	if err != nil {
@@ -55,13 +54,12 @@ func ListProjects(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO
-	// 2. Pastikan array tidak bernilai nil agar menjadi [] di JSON, bukan null
+	// 2. Array tidak bernilai nil agar menjadi [] di JSON, bukan null
 	if projects == nil {
-		projects = []lmodel.Project{} // Sesuaikan dengan tipe struct Project Anda
+		projects = []lmodel.Project{}
 	}
 
-	// 3. Mengembalikan daftar proyek dalam format JSON[cite: 2]
+	// 3. Mengembalikan daftar proyek dalam format JSON
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(&projects)
 }
@@ -78,7 +76,7 @@ func GetAllProjectGrades(w http.ResponseWriter, r *http.Request) {
 		grades = []lmodel.ProjectGrade{} // Tipe data disesuaikan dengan kembalian fungsi db.go
 	}
 
-	// 2. Mengembalikan nilai seluruh proyek dalam format JSON[cite: 2]
+	// 2. Mengembalikan nilai seluruh proyek dalam format JSON
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(&grades)
@@ -102,7 +100,7 @@ func GradeProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 3. Simpan nilai ke database[cite: 2]
+	// 3. Simpan nilai ke database
 	// Asumsi db.SubmitGrade mengeksekusi INSERT/UPDATE ke tabel grades
 	err = db.CreateGrade(r.Context(), projectID, userCtx.ID, req.Score, req.Feedback)
 	if err != nil {
@@ -110,7 +108,7 @@ func GradeProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 4. Respons 201 dengan pesan "Grade Submitted"[cite: 3]
+	// 4. Respons 201 dengan pesan "Grade Submitted"
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Grade Submitted"})
@@ -119,7 +117,6 @@ func GradeProject(w http.ResponseWriter, r *http.Request) {
 func GetProjectGrades(w http.ResponseWriter, r *http.Request) {
 	userCtx, _ := lmodel.UserFromContext(r.Context())
 
-	// TODO
 	idParam := r.PathValue("id")
 	projectID, err := strconv.Atoi(idParam)
 	if err != nil {

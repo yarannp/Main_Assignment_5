@@ -16,7 +16,7 @@ func AuthN(next http.Handler) http.Handler {
 			return
 		}
 
-		// 2. Pastikan formatnya adalah "Bearer <token_panjang>"
+		// 2. Formatnya adalah "Bearer <token>"
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
 			http.Error(w, "Unauthorized: Invalid token format", http.StatusUnauthorized)
@@ -41,7 +41,7 @@ func AuthN(next http.Handler) http.Handler {
 		// 5. Titipkan data user yang berhasil login ke dalam r.Context()
 		ctx := lmodel.ContextWithUser(r.Context(), userCtx)
 
-		// 6. Lanjutkan ke request berikutnya (handler) dengan context yang sudah diisi
+		// 6. Request berikutnya (handler) dengan context yang sudah diisi
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
